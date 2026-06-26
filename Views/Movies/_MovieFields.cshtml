@@ -28,3 +28,13 @@
     <input asp-for="Rating" type="number" min="1" max="5" />
     <span asp-validation-for="Rating" class="field-validation-error"></span>
 </div>
+
+<div class="field">
+    <label>Poster (optional, JPG or PNG, max 2 MB)</label>
+    @if (!string.IsNullOrEmpty(Model.PosterFileName))
+    {
+        <div><img src="~/uploads/@Model.PosterFileName" alt="current poster" class="poster-thumb" /></div>
+    }
+    <input type="file" name="poster" accept=".jpg,.jpeg,.png" />
+    @Html.ValidationMessage("poster", null, new { @class = "field-validation-error" })
+</div>
