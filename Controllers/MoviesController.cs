@@ -16,13 +16,41 @@ public class MoviesController : Controller
 
     private int CurrentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? search, string? status, string sort = "added", string dir = "desc")
     {
-        var movies = await _db.Movies
-            .Where(m => m.UserId == CurrentUserId)
-            .OrderByDescending(m => m.Id)
-            .ToListAsync();
-        return View(movies);
+        var query = _db.Movies.Where(m => m.UserId == CurrentUserId);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var s = search.Trim();
+            query = query.Where(m => m.Title.Contains(s) || (m.Genre != null && m.Genre.Contains(s)));
+        }
+
+        if (status == "WantToWatch") query = query.Where(m => m.Status == WatchStatus.WantToWatch);
+        else if (status == "Watched") query = query.Where(m => m.Status == WatchStatus.Watched);
+
+        bool asc = dir == "asc";
+        query = sort switch
+        {
+            "title" => asc ? query.OrderBy(m => m.Title) : query.OrderByDescending(m => m.Title),
+            "year" => asc ? query.OrderBy(m => m.Year) : query.OrderByDescending(m => m.Year),
+            "rating" => asc ? query.OrderBy(m => m.Rating) : query.OrderByDescending(m => m.Rating),
+            _ => asc ? query.OrderBy(m => m.Id) : query.OrderByDescending(m => m.Id),
+        };
+
+        var owned = _db.Movies.Where(m => m.UserId == CurrentUserId);
+        var vm = new MoviesIndexViewModel
+        {
+            Movies = await query.ToListAsync(),
+            Search = search,
+            Status = status,
+            Sort = sort,
+            Dir = dir,
+            TotalCount = await owned.CountAsync(),
+            WatchedCount = await owned.CountAsync(m => m.Status == WatchStatus.Watched),
+            WantCount = await owned.CountAsync(m => m.Status == WatchStatus.WantToWatch),
+        };
+        return View(vm);
     }
 
     [HttpGet]
@@ -85,6 +113,18 @@ public class MoviesController : Controller
             _db.Movies.Remove(movie);
             await _db.SaveChangesAsync();
         }
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ToggleWatched(int id)
+    {
+        var movie = await FindOwnedAsync(id);
+        if (movie == null) return NotFound();
+
+        movie.Status = movie.Status == WatchStatus.Watched ? WatchStatus.WantToWatch : WatchStatus.Watched;
+        await _db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
