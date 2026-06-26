@@ -1,0 +1,16 @@
+@model Movie
+@{
+    ViewData["Title"] = "Delete Movie";
+}
+
+<h1>Delete movie</h1>
+
+<p>Are you sure you want to delete <strong>@Model.Title</strong> (@Model.Year)?</p>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="actions">
+        <button type="submit" class="btn primary">Yes, delete</button>
+        <a class="btn" asp-action="Index">Cancel</a>
+    </div>
+</form>
