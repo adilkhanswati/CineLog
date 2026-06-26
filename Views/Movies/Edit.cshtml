@@ -5,7 +5,7 @@
 
 <h1>Edit movie</h1>
 
-<form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="card">
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data" class="card">
     <input type="hidden" asp-for="Id" />
     <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
     <partial name="_MovieFields" model="Model" />

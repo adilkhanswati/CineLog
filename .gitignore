@@ -17,3 +17,7 @@ obj/
 ## Rider
 *.sln.iml
 
+
+## Uploaded poster images
+wwwroot/uploads/
+

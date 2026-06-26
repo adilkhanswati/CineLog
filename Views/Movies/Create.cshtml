@@ -5,7 +5,7 @@
 
 <h1>Add movie</h1>
 
-<form asp-action="Create" method="post" class="card">
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="card">
     <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
     <partial name="_MovieFields" model="Model" />
     <div class="actions">

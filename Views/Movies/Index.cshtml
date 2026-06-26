@@ -43,6 +43,7 @@ else
     <table>
         <thead>
             <tr>
+                <th></th>
                 <th>Title</th>
                 <th>Genre</th>
                 <th>Year</th>
@@ -55,6 +56,12 @@ else
             @foreach (var m in Model.Movies)
             {
                 <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(m.PosterFileName))
+                        {
+                            <img src="~/uploads/@m.PosterFileName" alt="" class="poster-thumb" />
+                        }
+                    </td>
                     <td>@m.Title</td>
                     <td>@(string.IsNullOrWhiteSpace(m.Genre) ? "-" : m.Genre)</td>
                     <td>@m.Year</td>
