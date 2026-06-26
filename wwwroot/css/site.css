@@ -73,3 +73,8 @@ input[type=text], input[type=password], input[type=number], select {
 
 .btn:focus, input:focus, select:focus { outline: 2px solid #111; outline-offset: 1px; }
 
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+.filters input[type=text] { width: auto; flex: 1 1 220px; }
+.filters select { width: auto; }
+
