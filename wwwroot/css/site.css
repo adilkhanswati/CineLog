@@ -1,0 +1,72 @@
+* { box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: #111;
+    background: #fff;
+    margin: 0;
+    line-height: 1.5;
+}
+
+header { border-bottom: 2px solid #111; }
+
+nav {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand { font-weight: 700; font-size: 20px; text-decoration: none; color: #111; }
+
+.nav-links { display: flex; align-items: center; gap: 16px; }
+.nav-links a { color: #111; text-decoration: none; }
+.nav-links a:hover { text-decoration: underline; }
+.who { color: #555; }
+
+main { max-width: 880px; margin: 0 auto; padding: 28px 20px; }
+
+h1 { font-size: 24px; margin: 0 0 18px; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #ddd; }
+th { border-bottom: 2px solid #111; }
+.row-actions a { margin-right: 12px; }
+
+.btn, .linkbtn {
+    display: inline-block;
+    border: 1px solid #111;
+    background: #fff;
+    color: #111;
+    padding: 7px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font: inherit;
+}
+.btn:hover { background: #111; color: #fff; }
+.btn.primary { background: #111; color: #fff; }
+.btn.primary:hover { background: #333; }
+
+form.inline { display: inline; margin: 0; }
+button.linkbtn { border: none; background: none; padding: 0; text-decoration: underline; }
+
+.card { max-width: 420px; }
+.field { margin-bottom: 14px; }
+label { display: block; margin-bottom: 4px; font-weight: 600; }
+input[type=text], input[type=password], input[type=number], select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #111;
+    background: #fff;
+    font: inherit;
+}
+
+.actions { margin-top: 20px; display: flex; gap: 10px; }
+.toolbar { margin-bottom: 18px; }
+.empty { color: #555; padding: 16px 0; }
+.muted { color: #555; }
+
+.validation-summary-errors { color: #b00; margin-bottom: 12px; }
+.field-validation-error { color: #b00; font-size: 13px; display: block; margin-top: 4px; }
