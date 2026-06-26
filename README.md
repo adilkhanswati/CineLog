@@ -37,3 +37,7 @@ database (`cinelog.db`) is created automatically on first run.
 - Aman Khan (SE232003)
 - Adil Khan (SE231076)
 
+
+## Notes
+The account you register is signed in automatically. Each user only sees their own movies, and passwords are stored as PBKDF2 hashes - never in plain text.
+
