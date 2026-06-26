@@ -78,3 +78,6 @@ input[type=text], input[type=password], input[type=number], select {
 .filters input[type=text] { width: auto; flex: 1 1 220px; }
 .filters select { width: auto; }
 
+
+.poster-thumb { width: 40px; height: 56px; object-fit: cover; border: 1px solid #111; display: block; }
+
