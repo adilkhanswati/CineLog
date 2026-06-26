@@ -1,0 +1,16 @@
+@model Movie
+@{
+    ViewData["Title"] = "Edit Movie";
+}
+
+<h1>Edit movie</h1>
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="card">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+    <partial name="_MovieFields" model="Model" />
+    <div class="actions">
+        <button type="submit" class="btn primary">Save changes</button>
+        <a class="btn" asp-action="Index">Cancel</a>
+    </div>
+</form>
