@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CineLog</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav>
+            <a class="brand" asp-controller="Home" asp-action="Index">CineLog</a>
+            <div class="nav-links">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Movies" asp-action="Index">My Movies</a>
+                    <span class="who">@User.Identity!.Name</span>
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                        <button type="submit" class="linkbtn">Logout</button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login">Login</a>
+                    <a asp-controller="Account" asp-action="Register">Register</a>
+                }
+            </div>
+        </nav>
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
