@@ -29,6 +29,9 @@ public class Movie
     [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5.")]
     public int? Rating { get; set; }
 
+    // Stored file name of an uploaded poster image (in wwwroot/uploads), if any.
+    public string? PosterFileName { get; set; }
+
     // Owner of this movie entry.
     public int UserId { get; set; }
 }
