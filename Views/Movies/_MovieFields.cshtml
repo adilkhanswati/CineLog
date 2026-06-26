@@ -1,0 +1,30 @@
+@model Movie
+
+<div class="field">
+    <label asp-for="Title"></label>
+    <input asp-for="Title" autofocus />
+    <span asp-validation-for="Title" class="field-validation-error"></span>
+</div>
+
+<div class="field">
+    <label asp-for="Genre"></label>
+    <input asp-for="Genre" />
+    <span asp-validation-for="Genre" class="field-validation-error"></span>
+</div>
+
+<div class="field">
+    <label asp-for="Year"></label>
+    <input asp-for="Year" type="number" />
+    <span asp-validation-for="Year" class="field-validation-error"></span>
+</div>
+
+<div class="field">
+    <label asp-for="Status"></label>
+    <select asp-for="Status" asp-items="Html.GetEnumSelectList<WatchStatus>()"></select>
+</div>
+
+<div class="field">
+    <label asp-for="Rating">Rating (1-5, optional)</label>
+    <input asp-for="Rating" type="number" min="1" max="5" />
+    <span asp-validation-for="Rating" class="field-validation-error"></span>
+</div>
