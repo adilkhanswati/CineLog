@@ -10,9 +10,17 @@ namespace CineLog.Controllers;
 [Authorize]
 public class MoviesController : Controller
 {
-    private readonly AppDbContext _db;
+    private static readonly string[] AllowedPosterTypes = { ".jpg", ".jpeg", ".png" };
+    private const long MaxPosterBytes = 2 * 1024 * 1024; // 2 MB
 
-    public MoviesController(AppDbContext db) => _db = db;
+    private readonly AppDbContext _db;
+    private readonly IWebHostEnvironment _env;
+
+    public MoviesController(AppDbContext db, IWebHostEnvironment env)
+    {
+        _db = db;
+        _env = env;
+    }
 
     private int CurrentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
@@ -58,11 +66,14 @@ public class MoviesController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Movie movie)
+    public async Task<IActionResult> Create(Movie movie, IFormFile? poster)
     {
+        ValidatePoster(poster);
         if (!ModelState.IsValid) return View(movie);
 
         movie.UserId = CurrentUserId;
+        if (poster != null) movie.PosterFileName = await SavePosterAsync(poster);
+
         _db.Movies.Add(movie);
         await _db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
@@ -78,12 +89,14 @@ public class MoviesController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Movie movie)
+    public async Task<IActionResult> Edit(int id, Movie movie, IFormFile? poster)
     {
         if (id != movie.Id) return NotFound();
 
         var existing = await FindOwnedAsync(id);
         if (existing == null) return NotFound();
+
+        ValidatePoster(poster);
         if (!ModelState.IsValid) return View(movie);
 
         existing.Title = movie.Title;
@@ -91,6 +104,8 @@ public class MoviesController : Controller
         existing.Year = movie.Year;
         existing.Status = movie.Status;
         existing.Rating = movie.Rating;
+        if (poster != null) existing.PosterFileName = await SavePosterAsync(poster);
+
         await _db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
@@ -126,6 +141,27 @@ public class MoviesController : Controller
         movie.Status = movie.Status == WatchStatus.Watched ? WatchStatus.WantToWatch : WatchStatus.Watched;
         await _db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
+    }
+
+    private void ValidatePoster(IFormFile? poster)
+    {
+        if (poster == null || poster.Length == 0) return;
+
+        var ext = Path.GetExtension(poster.FileName).ToLowerInvariant();
+        if (!AllowedPosterTypes.Contains(ext))
+            ModelState.AddModelError("poster", "Poster must be a JPG or PNG image.");
+        if (poster.Length > MaxPosterBytes)
+            ModelState.AddModelError("poster", "Poster must be smaller than 2 MB.");
+    }
+
+    private async Task<string> SavePosterAsync(IFormFile poster)
+    {
+        var dir = Path.Combine(_env.WebRootPath, "uploads");
+        Directory.CreateDirectory(dir);
+        var name = $"{Guid.NewGuid():N}{Path.GetExtension(poster.FileName).ToLowerInvariant()}";
+        await using var stream = System.IO.File.Create(Path.Combine(dir, name));
+        await poster.CopyToAsync(stream);
+        return name;
     }
 
     private Task<Movie?> FindOwnedAsync(int id) =>
