@@ -32,3 +32,8 @@ database (`cinelog.db`) is created automatically on first run.
 | `Data/AppDbContext.cs` | EF Core database context |
 | `Helpers/PasswordHasher.cs` | PBKDF2 password hashing |
 | `Views/` | Razor views (minimal black-and-white UI) |
+
+## Authors
+- Aman Khan (SE232003)
+- Adil Khan (SE231076)
+
