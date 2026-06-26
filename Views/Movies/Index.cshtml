@@ -1,0 +1,46 @@
+@model IEnumerable<Movie>
+@{
+    ViewData["Title"] = "My Movies";
+}
+
+<h1>My Movies</h1>
+
+<div class="toolbar">
+    <a class="btn primary" asp-action="Create">+ Add movie</a>
+</div>
+
+@if (!Model.Any())
+{
+    <p class="empty">No movies yet. Add your first one above.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Year</th>
+                <th>Status</th>
+                <th>Rating</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td>@m.Title</td>
+                    <td>@(string.IsNullOrWhiteSpace(m.Genre) ? "-" : m.Genre)</td>
+                    <td>@m.Year</td>
+                    <td>@(m.Status == WatchStatus.WantToWatch ? "Want to Watch" : "Watched")</td>
+                    <td>@(m.Rating.HasValue ? $"{m.Rating}/5" : "-")</td>
+                    <td class="row-actions">
+                        <a asp-action="Edit" asp-route-id="@m.Id">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@m.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
